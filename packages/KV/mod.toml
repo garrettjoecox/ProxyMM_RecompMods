@@ -1,0 +1,35 @@
+[manifest]
+id = "ProxyMM_KV"
+version = "0.0.1"
+display_name = "KV"
+description =  """
+A simple KV Store
+"""
+short_description = "A simple KV Store"
+authors = [ "ProxySaw" ]
+game_id = "mm"
+minimum_recomp_version = "1.2.0"
+dependencies = []
+native_libraries = [
+    { name = "libsqlite3", funcs = [
+        "sqlite3_open",
+        "sqlite3_errmsg",
+        "sqlite3_free",
+        "sqlite3_close",
+        "sqlite3_exec",
+        "sqlite3_prepare_v2",
+        "sqlite3_bind_text",
+        "sqlite3_bind_blob",
+        "sqlite3_step",
+        "sqlite3_finalize",
+        "sqlite3_column_bytes",
+        "sqlite3_column_blob",
+    ] },
+]
+
+[inputs]
+elf_path = "../../build/packages/KV/mod.elf"
+mod_filename = "ProxyMM_KV"
+func_reference_syms_file = "../../Zelda64RecompSyms/mm.us.rev1.syms.toml"
+data_reference_syms_files = [ "../../Zelda64RecompSyms/mm.us.rev1.datasyms.toml", "../../Zelda64RecompSyms/mm.us.rev1.datasyms_static.toml", "../../custom_syms.toml" ]
+additional_files = [ "thumb.png" ]

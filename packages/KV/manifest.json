@@ -1,0 +1,7 @@
+{
+    "name": "KV",
+    "version_number": "0.0.1",
+    "website_url": "https://github.com/garrettjoecox/ProxyMM_RecompMods",
+    "description": "A simple KV Store",
+    "dependencies": []
+}
