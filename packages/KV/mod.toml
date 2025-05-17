@@ -12,10 +12,14 @@ minimum_recomp_version = "1.2.0"
 dependencies = []
 native_libraries = [
     { name = "ProxyRecomp_KV004", funcs = [
+        "KV_PathUpdateInternal",
         "KV_Get",
         "KV_Set",
         "KV_Has",
-        "KV_Remove"] }
+        "KV_Remove",
+        "KV_DeleteSlot",
+        "KV_CopySlot"
+    ] }
 ]
 
 [inputs]

@@ -17,6 +17,12 @@ endif
 
 TARGET  := $(BUILD_DIR)/$(MOD_DIR)/mod.elf
 
+ifeq ($(OS),Windows_NT)
+RECOMP_MOD_TOOL := RecompModTool.exe
+else
+RECOMP_MOD_TOOL := ./RecompModTool
+endif
+
 LDSCRIPT := mod.ld
 CFLAGS   := -target mips -mips2 -mabi=32 -O2 -G0 -mno-abicalls -mno-odd-spreg -mno-check-zero-division \
 			-fomit-frame-pointer -ffast-math -fno-unsafe-math-optimizations -fno-builtin-memset \
@@ -35,13 +41,20 @@ $(TARGET): $(C_OBJS) $(LDSCRIPT) | $(BUILD_DIR)
 	$(MAKE) post-build
 
 $(BUILD_DIR) $(BUILD_DIR)/$(MOD_DIR)/src:
+ifeq ($(OS),Windows_NT)
+	mkdir $(subst /,\,$@)
+else
 	mkdir -p $@
+endif
 
 $(C_OBJS): $(BUILD_DIR)/%.o : %.c | $(BUILD_DIR) $(BUILD_DIR)/$(MOD_DIR)/src
 	$(CC) $(CFLAGS) $(CPPFLAGS) $< -MMD -MF $(@:.o=.d) -c -o $@
 
+no-post-build: $(TARGET)
+	$(RECOMP_MOD_TOOL) $(MOD_DIR)/mod.toml $(BUILD_DIR)/$(MOD_DIR)
+	
 post-build: $(TARGET)
-	./RecompModTool $(MOD_DIR)/mod.toml $(BUILD_DIR)/$(MOD_DIR) && mkdir -p ~/.config/Zelda64Recompiled/mods && cp $(BUILD_DIR)/$(MOD_DIR)/*.nrm ~/.config/Zelda64Recompiled/mods
+	$(RECOMP_MOD_TOOL) $(MOD_DIR)/mod.toml $(BUILD_DIR)/$(MOD_DIR) && mkdir -p ~/.config/Zelda64Recompiled/mods && cp $(BUILD_DIR)/$(MOD_DIR)/*.nrm ~/.config/Zelda64Recompiled/mods
 
 clean:
 	rm -rf $(BUILD_DIR)
